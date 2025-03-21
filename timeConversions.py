@@ -2,36 +2,38 @@ import timezonefinder
 import pytz
 import datetime
 
-lati = 43.01
-long = -74
-
-# Getting the name of the time zone at latitude and longitude
-tzf = timezonefinder.TimezoneFinder()
-user_timezone = tzf.timezone_at(lat=lati, lng=long)
-#print("Time zone at latitude:", lati, "longitude:", long, "  -- ", user_timezone)
-
-gmtTZ = pytz.timezone('Etc/GMT0');
-userTZ = pytz.timezone(user_timezone);
-
-# Getting local and GMT time
-time = datetime.datetime.now()
-userTime = userTZ.localize(time)
-gmtTime = userTime.astimezone(gmtTZ)
+# Latitude and longitude can be any number between -180.0 and 180.0
+# Returns the name of the timezone at latitude and longitude
+def getTimeZone(latitude, longitude):
+    tzf = timezonefinder.TimezoneFinder()
+    user_timezone = tzf.timezone_at(lat=latitude, lng=longitude)
+    #print("Time zone at latitude:", lati, "longitude:", long, "  -- ", user_timezone)
+    return user_timezone
 
 
-# import datetime
-# import pytz
-#
-# # Get a time zone object
-# eastern = pytz.timezone('US/Eastern')
-#
-# # Localize a naive datetime
-# naive_dt = datetime.datetime(2024, 3, 21, 10, 0, 0)
-# local_dt = eastern.localize(naive_dt)
-#
-# # Convert to another time zone
-# utc_dt = local_dt.astimezone(pytz.utc)
-#
-# print(f"Naive: {naive_dt}")
-# print(f"Local: {local_dt}")
-# print(f"UTC: {utc_dt}")
+# time is a datetime object, user_timezone is the name of a timezone (i.e. 'Asia/Kolkata')
+# Returns the offset of user's time from GMT (can be from -24.0 to 24.0)
+def getTimeZoneOffset(time, initial_timezone, final_timezone):
+    tz1 = pytz.timezone(initial_timezone);
+    tz2 = pytz.timezone(final_timezone);
+
+    initTime = tz1.localize(time)
+    finalTime = initTime.astimezone(tz2)
+
+    return (finalTime.hour - initTime.hour) + (finalTime.minute - initTime.minute) / 60
+
+# time is a naive datetime object, initial_timezone is the name (i.e. 'Asia/Kolkata') of the
+#    timezone you are in and final_timezone is the name of the timezone you want the returned time to be in
+# Returns the offset of user's time from GMT (can be from -24.0 to 24.0)
+def changeTimeZone(time, initial_timezone, final_timezone):
+    finalTZ = pytz.timezone(final_timezone);
+    initialTZ = pytz.timezone(initial_timezone);
+
+    initTime = initialTZ.localize(time)
+    finalTime = initTime.astimezone(finalTZ)
+
+    return finalTime
+
+def localize(time, timezone):
+    tz = pytz.timezone(timezone)
+    return tz.localize(time)
