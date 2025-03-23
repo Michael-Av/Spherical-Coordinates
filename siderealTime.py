@@ -1,44 +1,13 @@
+import solarNoon
 import timeConversions
-import datetime
 
-saoTomeLatitude = 0.3376
-saoTomeLongitude = 6.7299
-userLatitude = 41
-userLongitude = -74
+latitude = 48.86
+longitude = 2.35
 
-# Getting current time, user time zone
-time = datetime.datetime(2025, 3, 23, 5, 56, 0)
-userTimeZone = timeConversions.getTimeZone(userLatitude, userLongitude)
-#print(userTimeZone)
-userTime = timeConversions.localize(time, userTimeZone)
+# Getting time zone of userTime
+timezone = timeConversions.getTimeZone(latitude, longitude)
+solarNoon = solarNoon.calculateSolarNoon(timezone, longitude)
 
-# Creating saoTomeSolarNoon time, converting to user's local time zone
-saoTomeYear = 2025
-saoTomeMonth = 3
-saoTomeDay = 23
-saoTomeHour = 11
-saoTomeMinute = 39
-saoTomeSecond = 0
-saoTomeTimeZone = 'Etc/GMT0'
-
-saoTomeNoon = saoTomeHour + saoTomeMinute / 60
-saoTomeNoonFormatted = datetime.datetime(saoTomeYear, saoTomeMonth, saoTomeDay, saoTomeHour, saoTomeMinute, saoTomeSecond)
-timezoneOffset = timeConversions.getTimeZoneOffset(saoTomeNoonFormatted, saoTomeTimeZone, userTimeZone)
-#print(timezoneOffset)
-# Using negatives to keep track of west of GMT
-if (timezoneOffset > 12):
-    timezoneOffset -= 24
-localsaoTomeNoon = saoTomeNoon + timezoneOffset
-
-
-# Using angular distance to determine when solar noon would be for user
-# The localsaoTomeNoon is solar noon for saoTome in the time zone of the user. The solar noon for the user
-# is the solar time for saoTome minus the angular difference in the two place's longitudes
-
-# Getting angular longitudinal distance from saoTome (between -1 and 1)
-# i.e. How far east (or west if negative) you'd have to walk around the Earth from saoTome to user
-physicalAngularDist = (userLongitude - saoTomeLongitude) / 360
-solarNoon = localsaoTomeNoon - physicalAngularDist * 24
 
 print(solarNoon)
 # print("Local User time            :", userTime)
