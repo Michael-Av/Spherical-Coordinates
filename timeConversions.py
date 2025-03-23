@@ -11,16 +11,17 @@ def getTimeZone(latitude, longitude):
     return user_timezone
 
 
-# time is a datetime object, user_timezone is the name of a timezone (i.e. 'Asia/Kolkata')
+# time is an aware datetime object, user_timezone is the name of a timezone (i.e. 'Asia/Kolkata')
 # Returns the offset of user's time from GMT (can be from -24.0 to 24.0)
 def getTimeZoneOffset(time, initial_timezone, final_timezone):
     tz1 = pytz.timezone(initial_timezone);
     tz2 = pytz.timezone(final_timezone);
 
-    initTime = tz1.localize(time)
-    finalTime = initTime.astimezone(tz2)
+    gmtOffset1 = tz1.utcoffset(time)
+    gmtOffset2 = tz2.utcoffset(time)
 
-    return (finalTime.hour - initTime.hour) + (finalTime.minute - initTime.minute) / 60
+    timeDifference = (gmtOffset2 - gmtOffset1).seconds / 3600.0
+    return timeDifference
 
 # time is a naive datetime object, initial_timezone is the name (i.e. 'Asia/Kolkata') of the
 #    timezone you are in and final_timezone is the name of the timezone you want the returned time to be in
