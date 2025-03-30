@@ -1,8 +1,8 @@
 import solarNoon
 import timeConversions
 
-latitude = 48.86
-longitude = 2.35
+latitude = 40.77
+longitude = -73.98
 
 # Getting time zone of userTime
 timezone = timeConversions.getTimeZone(latitude, longitude)
