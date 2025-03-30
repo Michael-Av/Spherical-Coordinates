@@ -7,11 +7,12 @@ PI = np.pi
 # +z = up (towards zenith)
 
 # horizontal coordinates
-azimuth = PI / 3;
-altitude = PI / 4;
+azimuth = PI / 3
+altitude = PI / 4
 
-# observer location
-latitude = PI / 6;
+# observer details
+latitude = PI / 6
+siderealTime = PI
 
 # define vectors
 zenithVec = np.array([0, 0, 1])
@@ -31,3 +32,8 @@ print("object: ", objectVec)
 OP = np.arccos(poleVec.dot(objectVec))
 PZ = PI / 2 - latitude
 ZO = PI / 2 - altitude
+
+# le mathimatique
+declination = PI / 2 - OP
+hourAngle = np.arccos((np.cos(ZO) - np.cos(OP) * np.cos(PZ)) / (np.sin(OP) * np.sin(PZ)))
+rightAscension = siderealTime - hourAngle
