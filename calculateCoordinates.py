@@ -24,9 +24,9 @@ zenithVec = zenithVec / np.linalg.norm(zenithVec)
 poleVec = poleVec / np.linalg.norm(poleVec)
 objectVec = objectVec / np.linalg.norm(objectVec)
 
-print("zenith: ", zenithVec)
-print("pole: ", poleVec)
-print("object: ", objectVec)
+#print("zenith: ", zenithVec)
+#print("pole: ", poleVec)
+#print("object: ", objectVec)
 
 # sides of astronomical triangle
 OP = np.arccos(poleVec.dot(objectVec))
@@ -37,3 +37,6 @@ ZO = PI / 2 - altitude
 declination = PI / 2 - OP
 hourAngle = np.arccos((np.cos(ZO) - np.cos(OP) * np.cos(PZ)) / (np.sin(OP) * np.sin(PZ)))
 rightAscension = siderealTime - hourAngle
+
+print("declination = ", declination)
+print("rightAscension = ", rightAscension)
