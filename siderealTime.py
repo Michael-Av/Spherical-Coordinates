@@ -3,17 +3,17 @@ import timeConversions
 import datetime
 
 latitude = 40.77
-longitude = -73.98
+longitude = -74
 
 # Getting time zone of userTime
-currentTime = datetime.datetime.now()
+currentTime = datetime.datetime(2025, 9, 12, 18, 23, 0)
 timezone = timeConversions.getTimeZone(latitude, longitude)
 
 solarNoon = solarNoon.calculateSolarNoon(timezone, longitude, currentTime)
 
 # Using current date to figure out offset from vernal equinox
-vernalOffset = (currentTime.month - 3) + ((currentTime.day - 20) / 30)
-vernalOffset /= 12
+vernalEquinox = datetime.datetime(currentTime.year, 3, 20, 0, 0, 0)
+vernalOffset = (currentTime - vernalEquinox).days / 365.0
 print(vernalOffset)
 
 # Using current time to figure out offset from solar noon
@@ -22,7 +22,7 @@ solarNoonOffset = (time - solarNoon) / 24
 print(solarNoonOffset)
 
 # Calculate siderealtime
-siderealTime = 24 * (solarNoonOffset - vernalOffset)
+siderealTime = 24 * (solarNoonOffset + vernalOffset)
 print(siderealTime)
 
 #print(solarNoon)
