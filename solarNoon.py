@@ -4,13 +4,13 @@ import datetime
 saoTomeLatitude = 0.3376
 saoTomeLongitude = 6.7299
 
-def calculateSolarNoon(userTimeZone, userLongitude):
+def calculateSolarNoon(userTimeZone, userLongitude, time):
     # Getting saoTome information
-    saoTomeYear = 2025
-    saoTomeMonth = 3
-    saoTomeDay = 23
+    saoTomeYear = time.year
+    saoTomeMonth = time.month
+    saoTomeDay = time.day
     saoTomeHour = 11
-    saoTomeMinute = 39
+    saoTomeMinute = 33
     saoTomeSecond = 0
     saoTomeTimeZone = 'Etc/GMT0'
 
