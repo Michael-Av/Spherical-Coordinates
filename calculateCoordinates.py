@@ -11,15 +11,15 @@ PI = np.pi
 # +z = up (towards zenith)
 
 # Observer coordinates
-latitude=59.91
-longitude=10.75
+latitude=-35.3
+longitude=149.1310
 # datetime.datetime(YEAR, MON, DAY, HOUR, MIN, SEC)
-time = datetime.datetime(2025, 4, 23, 22, 39, 0)
+time = datetime.datetime(2025, 4, 24, 6, 58, 0)
 siderealTime = siderealTime.getSiderealTime(latitude, longitude, time)
 
 # Object coordinates
-azimuth=161
-altitude=37
+azimuth=283.7
+altitude=71.5
 
 def calcCoords(azimuth, altitude, latitude, siderealTime):
 	# define vectors
