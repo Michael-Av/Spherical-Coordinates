@@ -2,7 +2,7 @@ import solarNoon
 import timeConversions
 import datetime
 
-latitude = 51
+latitude = 54
 longitude = 0
 
 # Takes in two floats, one aware datetime object
@@ -29,8 +29,10 @@ def getSiderealTime(latitude, longitude, time):
         siderealTime += 24
     if (siderealTime >= 24):
         siderealTime -= 24
-    print(siderealTime)
-    return siderealTime
+    #print(siderealTime)
+
+    # Returning siderealTime as a fraction of 2 pi
+    return siderealTime * 2 * 3.14159 / 24
 
 
-getSiderealTime(latitude, longitude, datetime.datetime.now())
+getSiderealTime(latitude, longitude, datetime.datetime(2025, 4, 23, 20, 15, 0))
