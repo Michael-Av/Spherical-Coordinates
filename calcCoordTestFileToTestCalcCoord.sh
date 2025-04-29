@@ -11,7 +11,7 @@ degToRad() {
   echo "($1+$2/60)*3.14159265/180" | bc -l
 }
 
-names=('M80')
+names=('M80' 'a' 'b' 'c')
 altitudes=(8.7)
 azimuths=(110.9)
 latitudes=(44)
@@ -21,8 +21,8 @@ ras=($(hrsToRad "16" "17"))
 decs=($(degToRad "-22" "-58"))
 
 f() {
-  arrayLength=${#names[@]}
-  for i in {0..1}; do
+  maxIndex=$((${#names[@]} - 1))
+  for i in $(seq 0 $maxIndex); do
     echo $i
   done
 }
