@@ -10,18 +10,20 @@ PI = np.pi
 # +y = west
 # +z = up (towards zenith)
 
-# Observer coordinates
-latitude=-35.3
-longitude=149.1310
+# # Observer coordinates
+# latitude=-35.3
+# longitude=149.1310
+
 # datetime.datetime(YEAR, MON, DAY, HOUR, MIN, SEC)
 time = datetime.datetime(2025, 4, 24, 6, 58, 0)
-siderealTime = siderealTime.getSiderealTime(latitude, longitude, time)
 
-# Object coordinates
-azimuth=283.7
-altitude=71.5
+# # Object coordinates
+# azimuth=283.7
+# altitude=71.5
 
-def calcCoords(azimuth, altitude, latitude, siderealTime):
+def calcCoords(altitude, azimuth, latitude, longitude):
+	siderealTime = siderealTime.getSiderealTime(latitude, longitude, time)
+
 	# define vectors
 	azimuth = azimuth * 2 * PI / 360
 	altitude = altitude * 2 * PI / 360
@@ -72,4 +74,4 @@ def calcCoords(azimuth, altitude, latitude, siderealTime):
 	print("hourAngle: ", hourAngle)
 	print("rightAscension = ", rightAscension)
 
-calcCoords(azimuth, altitude, latitude, siderealTime)
+calcCoords(argv[0], argv[1], argv[2], argv[3])
