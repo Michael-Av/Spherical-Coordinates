@@ -16,7 +16,7 @@ PI = np.pi
 # longitude=149.1310
 
 # datetime.datetime(YEAR, MON, DAY, HOUR, MIN, SEC)
-time = datetime.datetime(2026, 1, 15, 20, 0, 0)
+time = datetime.datetime(2026, 1, 15, 20, 5, 0)
 
 # # Object coordinates
 # azimuth=283.7
