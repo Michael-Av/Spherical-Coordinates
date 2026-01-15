@@ -75,4 +75,42 @@ def calcCoords(altitude, azimuth, latitude, longitude):
 
 	print("ANSWER!!!!", rld.findNearestStar(rightAscension, declination))
 
-calcCoords(float(sys.argv[1])*PI/180, float(sys.argv[2])*PI/180, float(sys.argv[3])*PI/180, float(sys.argv[4])*PI/180)
+commandLength = len(sys.argv)
+
+altitude = float(sys.argv[1])*PI/180
+azimuth = float(sys.argv[2])*PI/180
+# python3 calculateCoordinates.py altitude azimuth latitude longitude
+if commandLength == 5:
+	lat = float(sys.argv[3])*PI/180
+	long = float(sys.argv[4])*PI/180
+	calcCoords(altitude, azimuth, lat, long)
+# python3 calculateCoordinates.py altitude azimuthHour azimuthMinute latitude longitude
+elif commandLength == 6:
+	azimuthHr = float(sys.argv[2]) * PI / 12
+	azimuthMin = float(sys.argv[3]) * PI / 720
+	lat = float(sys.argv[4])*PI/180
+	long = float(sys.argv[5])*PI/180
+	calcCoords(altitude, azimuthHr + azimuthMin, lat, long)
+# python3 calculateCoordinates.py altitude azimuth city
+elif commandLength == 4:
+	lat = 0
+	long = 0
+	city = sys.argv[3]
+	if city.lower().strip() == "binghamton":
+		lat = 42.0894
+		long = -75.9695
+	elif city.lower().strip() == "rochester":
+		lat = 43.1306
+		long = -77.6260
+	elif city.lower().strip() == "new york city" or city.lower.strip() == "nyc":
+		lat = 40.7128
+		long = -74.0060
+	else:
+		print("City not recognized")
+		exit()
+	lat = lat * PI / 180
+	long = long * PI / 180
+	calcCoords(altitude, azimuth, lat, long)
+else:
+	print("Command not recognized: try using a correct format L")
+	exit()
