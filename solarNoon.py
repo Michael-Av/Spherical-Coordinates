@@ -1,8 +1,9 @@
 import timeConversions
 import datetime
+import numpy as np
 
-saoTomeLatitude = 0.3376
-saoTomeLongitude = 6.7299
+saoTomeLatitude = 0.3376 * np.pi / 180
+saoTomeLongitude = 6.7299 * np.pi / 180
 
 def getSaoTomeSolarNoon(userLocalTime):
     with open("dataTable.txt", "r") as file:
@@ -27,6 +28,7 @@ def getSaoTomeSolarNoon(userLocalTime):
             file.readline()
 
         solarNoon = file.readline()
+        print("sao tome solar noon:", solarNoon)
         return solarNoon[0:5]
 
 def calculateSolarNoon(userTimeZone, userLongitude, time):
@@ -49,6 +51,8 @@ def calculateSolarNoon(userTimeZone, userLongitude, time):
     if (timezoneOffset > 12):
         timezoneOffset -= 24
     localsaoTomeNoon = saoTomeNoon + timezoneOffset
+    #print("GMT: ",saoTomeNoon)
+    #print("NEWYORK: ",localsaoTomeNoon)
 
 
     # Using angular distance to determine when solar noon would be for user
@@ -57,7 +61,10 @@ def calculateSolarNoon(userTimeZone, userLongitude, time):
 
     # Getting angular longitudinal distance from saoTome (between -1 and 1)
     # i.e. How far east (or west if negative) you'd have to walk around the Earth from saoTome to user
-    physicalAngularDist = (userLongitude - saoTomeLongitude) / 360
-    solarNoon = localsaoTomeNoon - physicalAngularDist * 24
+    # print("userLongitude:", userLongitude)
+    # print("saoTomeLongitude:", saoTomeLongitude)
+    physicalAngularDist = (userLongitude - saoTomeLongitude) * (12 / np.pi)
+    #print("physicalAngularDist:", physicalAngularDist)
+    solarNoon = localsaoTomeNoon - physicalAngularDist
 
     return solarNoon

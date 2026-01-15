@@ -1,6 +1,7 @@
 import solarNoon
 import timeConversions
 import datetime
+import numpy as np
 
 latitude = 54
 longitude = 0
@@ -12,27 +13,30 @@ def getSiderealTime(latitude, longitude, time):
     timezone = timeConversions.getTimeZone(latitude, longitude)
 
     localSolarNoon = solarNoon.calculateSolarNoon(timezone, longitude, time)
+    print("localSolarNoon: ", localSolarNoon)
 
     # Using current date to figure out offset from vernal equinox
-    vernalEquinox = datetime.datetime(time.year, 3, 21, 0, 0, 0)
-    vernalOffset = (time - vernalEquinox).days / 365.0
-    #print(vernalOffset)
+    vernalEquinox = datetime.datetime(time.year, 3, 20, 9, 46, 0)
+    offset = time-vernalEquinox
+    vernalOffset = (offset.days + (offset.seconds / 3600 / 24)) / 365.25
+    print("vernalOffset:", vernalOffset)
 
     # Using current time to figure out offset from solar noon
     currentTime = time.hour + (time.minute / 60)
     solarNoonOffset = (currentTime - localSolarNoon) / 24
-    #print(solarNoonOffset)
+    print("Solar noon offset:", solarNoonOffset)
 
     # Calculate siderealtime
-    siderealTime = 24 * (solarNoonOffset + vernalOffset)
+    siderealTime = 24 * (solarNoonOffset + vernalOffset)# have faith
+
     if (siderealTime < 0):
         siderealTime += 24
     if (siderealTime >= 24):
         siderealTime -= 24
-    #print(siderealTime)
+    print("siderealTime:", siderealTime)
 
     # Returning siderealTime as a fraction of 2 pi
-    return siderealTime * 2 * 3.14159 / 24
+    return siderealTime * np.pi / 12
 
 
-getSiderealTime(latitude, longitude, datetime.datetime(2025, 4, 23, 20, 15, 0))
+# getSiderealTime(latitude, longitude, datetime.datetime(2025, 4, 23, 20, 15, 0))

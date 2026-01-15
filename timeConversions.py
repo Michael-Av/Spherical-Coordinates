@@ -1,13 +1,14 @@
 import timezonefinder
 import pytz
 import datetime
+import numpy as np
 
 # Latitude and longitude can be any number between -180.0 and 180.0
 # Returns the name of the timezone at latitude and longitude
 def getTimeZone(latitude, longitude):
     tzf = timezonefinder.TimezoneFinder()
-    user_timezone = tzf.timezone_at(lat=latitude, lng=longitude)
-    #print("Time zone at latitude:", lati, "longitude:", long, "  -- ", user_timezone)
+    user_timezone = tzf.timezone_at(lat=latitude*180/np.pi, lng=longitude*180/np.pi)
+    print("Time zone at latitude:", latitude, "longitude:", longitude, "  -- ", user_timezone)
     return user_timezone
 
 

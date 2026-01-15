@@ -2,7 +2,8 @@ import numpy as np
 import sys
 import math
 import datetime
-import siderealTime
+import siderealTime as st
+import readLeData as rld
 
 PI = np.pi
 
@@ -15,19 +16,14 @@ PI = np.pi
 # longitude=149.1310
 
 # datetime.datetime(YEAR, MON, DAY, HOUR, MIN, SEC)
-time = datetime.datetime(2025, 4, 24, 6, 58, 0)
+time = datetime.datetime(2026, 1, 15, 20, 0, 0)
 
 # # Object coordinates
 # azimuth=283.7
 # altitude=71.5
 
 def calcCoords(altitude, azimuth, latitude, longitude):
-	siderealTime = siderealTime.getSiderealTime(latitude, longitude, time)
-
-	# define vectors
-	azimuth = azimuth * 2 * PI / 360
-	altitude = altitude * 2 * PI / 360
-	latitude = latitude * 2 * PI / 360
+	siderealTime = st.getSiderealTime(latitude, longitude, time)
 
 	zenithVec = np.array([0, 0, 1])
 	poleVec = np.array([1, 0, np.tan(latitude)]) # Could be negative or positive
@@ -38,9 +34,10 @@ def calcCoords(altitude, azimuth, latitude, longitude):
 	poleVec = poleVec / np.linalg.norm(poleVec)
 	objectVec = objectVec / np.linalg.norm(objectVec)
 
-	#print(poleVec)
-	#print(objectVec)
-	#print(poleVec.dot(objectVec))
+	print("zenithVec: ", zenithVec)
+	print("poleVec: ", poleVec)
+	print("objectVec: ", objectVec)
+	print("poleVec.dot(objectVec): ", poleVec.dot(objectVec))
 	dotProduct = math.trunc(poleVec.dot(objectVec)*1000) / 1000.0
 
 	#print("zenith: ", zenithVec)
@@ -68,10 +65,14 @@ def calcCoords(altitude, azimuth, latitude, longitude):
 	if (azimuth < PI):
 		hourAngle = 2 * PI - hourAngle
 	rightAscension = siderealTime - hourAngle
+	if rightAscension < 0:
+		rightAscension += 2 * PI
 
-	print("declination = ", declination)
-	print("Sidereal time: ", siderealTime)
-	print("hourAngle: ", hourAngle)
-	print("rightAscension = ", rightAscension)
+	print("declination = ", declination*180/PI)
+	print("Sidereal time: ", siderealTime*12/PI)
+	print("hourAngle: ", hourAngle*12/PI)
+	print("rightAscension = ", rightAscension*12/PI)
 
-calcCoords(argv[0], argv[1], argv[2], argv[3])
+	print("ANSWER!!!!", rld.findNearestStar(rightAscension, declination))
+
+calcCoords(float(sys.argv[1])*PI/180, float(sys.argv[2])*PI/180, float(sys.argv[3])*PI/180, float(sys.argv[4])*PI/180)

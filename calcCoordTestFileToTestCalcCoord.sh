@@ -37,4 +37,4 @@ altitude=1
 azimuth=1
 siderealTime=1
 
-#python3 calculateCoordinates.py altitude azimuth latitude siderealTime
+# python3 calculateCoordinates.py altitude azimuth latitude siderealTime
