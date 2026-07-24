@@ -16,7 +16,7 @@ PI = np.pi
 # longitude=149.1310
 
 # datetime.datetime(YEAR, MON, DAY, HOUR, MIN, SEC)
-time = datetime.datetime(2026, 2, 6, 18, 42, 0)
+time = datetime.datetime(2026, 7, 24, 22, 0, 0)
 
 # # Object coordinates
 # azimuth=283.7
@@ -34,7 +34,7 @@ def calcCoords(altitude, azimuth, latitude, longitude):
 	poleVec = poleVec / np.linalg.norm(poleVec)
 	objectVec = objectVec / np.linalg.norm(objectVec)
 
-	print("zenithVec: ", zenithVec)
+	print("zenithVec: ", zenithVec) 
 	print("poleVec: ", poleVec)
 	print("objectVec: ", objectVec)
 	print("poleVec.dot(objectVec): ", poleVec.dot(objectVec))
@@ -72,45 +72,102 @@ def calcCoords(altitude, azimuth, latitude, longitude):
 	print("Sidereal time: ", siderealTime*12/PI)
 	print("hourAngle: ", hourAngle*12/PI)
 	print("rightAscension = ", rightAscension*12/PI)
-
 	print("ANSWER!!!!", rld.findNearestStar(rightAscension, declination))
 
-commandLength = len(sys.argv)
+def calcAzimuthalCoords(starName, latitude, longitude):
+	RA, dec = rld.getEquatorialCoords(starName)
+	siderealTime = st.getSiderealTime(latitude, longitude, time)
 
-altitude = float(sys.argv[1])*PI/180
-azimuth = float(sys.argv[2])*PI/180
-# python3 calculateCoordinates.py altitude azimuth latitude longitude
-if commandLength == 5:
-	lat = float(sys.argv[3])*PI/180
-	long = float(sys.argv[4])*PI/180
-	calcCoords(altitude, azimuth, lat, long)
-# python3 calculateCoordinates.py altitude azimuthHour azimuthMinute latitude longitude
-elif commandLength == 6:
-	azimuthHr = float(sys.argv[2]) * PI / 12
-	azimuthMin = float(sys.argv[3]) * PI / 720
-	lat = float(sys.argv[4])*PI/180
-	long = float(sys.argv[5])*PI/180
-	calcCoords(altitude, azimuthHr + azimuthMin, lat, long)
-# python3 calculateCoordinates.py altitude azimuth city
-elif commandLength == 4:
-	lat = 0
-	long = 0
-	city = sys.argv[3]
-	if city.lower().strip() == "binghamton":
-		lat = 42.0894
-		long = -75.9695
-	elif city.lower().strip() == "rochester":
-		lat = 43.1306
-		long = -77.6260
-	elif city.lower().strip() == "new york city" or city.lower.strip() == "nyc":
-		lat = 40.7128
-		long = -74.0060
-	else:
-		print("City not recognized")
-		exit()
-	lat = lat * PI / 180
-	long = long * PI / 180
-	calcCoords(altitude, azimuth, lat, long)
-else:
-	print("Command not recognized: try using a correct format L")
-	exit()
+	# le Plan
+
+	# azimuth = 360° - <PZO
+	# altitude = 90° - <ZO
+
+	# knowns:
+	# <ZPO (from HA <-- RA, ST) √
+	# <PZ (90° - lat) √
+	# <OP (90° - dec) √
+
+	# knowns --> <ZO --> alt (90° - ZO) √
+	# PZ, ZO, PO --> <PZO (law of cosines) --> azm (360° - <PZO) √
+
+	HA = siderealTime - RA
+	if HA < 0:
+		HA += 2*PI
+	ZPO = HA
+	print("HA:",HA)
+	if ZPO>PI:
+		ZPO=2*PI-ZPO
+	PZ = PI/2 - latitude
+	OP = PI/2 - dec
+
+	cosOZ = np.cos(OP)*np.cos(PZ) + np.sin(OP)*np.sin(PZ)*np.cos(ZPO)
+	OZ = np.arccos(cosOZ)
+	altitude = PI/2 - OZ
+
+	# print("ZPO:",ZPO)
+	# sinPZO = np.sin(OP)*np.sin(ZPO)/np.sin(OZ)
+	# print("SinPZO",sinPZO)
+	# PZO = np.arcsin(sinPZO)
+	# if HA>PI:
+	# 	PZO+=PI
+	# print("PZO:",PZO*180/PI)
+	# azimuth = 2*PI - PZO
+
+	cosPZO = (np.cos(OP)-np.cos(PZ)*np.cos(OZ))/(np.sin(PZ)*np.sin(OZ))
+	print("CosPZO:",cosPZO)
+	PZO = np.arccos(cosPZO)
+	if (HA > PI):
+		PZO=2*PI-PZO
+	print("PZO:",PZO*180/PI)
+	azimuth = 2*PI - PZO
+
+
+	if(azimuth>2*PI):
+		azimuth=azimuth-2*PI
+
+	print("Altitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI)
+
+lat=40.71273
+long=-74.00602
+calcAzimuthalCoords("Deneb", lat*PI/180, long*PI/180)
+
+# commandLength = len(sys.argv)
+
+# altitude = float(sys.argv[1])*PI/180
+# azimuth = float(sys.argv[2])*PI/180
+# # python3 calculateCoordinates.py altitude azimuth latitude longitude
+# if commandLength == 5:
+# 	lat = float(sys.argv[3])*PI/180
+# 	long = float(sys.argv[4])*PI/180
+# 	calcCoords(altitude, azimuth, lat, long)
+# # python3 calculateCoordinates.py altitude azimuthHour azimuthMinute latitude longitude
+# elif commandLength == 6:
+# 	azimuthHr = float(sys.argv[2]) * PI / 12
+# 	azimuthMin = float(sys.argv[3]) * PI / 720
+# 	lat = float(sys.argv[4])*PI/180
+# 	long = float(sys.argv[5])*PI/180
+# 	calcCoords(altitude, azimuthHr + azimuthMin, lat, long)
+# # python3 calculateCoordinates.py altitude azimuth city
+# elif commandLength == 4:
+# 	lat = 0
+# 	long = 0
+# 	city = sys.argv[3]
+# 	if city.lower().strip() == "binghamton":
+# 		lat = 42.0894
+# 		long = -75.9695
+# 	elif city.lower().strip() == "rochester":
+# 		lat = 43.1306
+# 		long = -77.6260
+# 	elif city.lower().strip() == "new york city" or city.lower().strip() == "nyc":
+# 		lat = 40.7128
+# 		long = -74.0060
+# 	else:
+# 		print("City not recognized")
+# 		exit()
+# 	lat = lat * PI / 180
+# 	long = long * PI / 180
+# 	calcCoords(altitude, azimuth, lat, long)
+# else:
+# 	print("Command not recognized: try using a correct format L")
+# 	exit()

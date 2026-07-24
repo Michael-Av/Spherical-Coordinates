@@ -1,3 +1,4 @@
+Star Name                 Other Name        RA    Dec                 SpecralTypo  VisMag AbsMagPrllx  Err    Distly
 Alpha Canis Majoris       Sirius            06 45 -16.7  227.2  -8.9  A1V          -1.44  1.45  379.21 1.58     9
 Alpha Carinae             Canopus           06 24 -52.7  261.2 -25.3  F0Ib         -0.62 -5.53   10.43 0.53   310
 Alpha Centauri            Rigil Kentaurus   14 40 -60.8  315.8  -0.7  G2V+K1V      -0.27  4.08  742.12 1.40     4

@@ -35,7 +35,7 @@ def getSiderealTime(latitude, longitude, time):
         siderealTime -= 24
     print("siderealTime:", siderealTime)
 
-    # Returning siderealTime as a fraction of 2 pi
+    # Returning siderealTime as radians
     return siderealTime * np.pi / 12
 
 
