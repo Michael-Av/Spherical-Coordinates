@@ -16,7 +16,7 @@ PI = np.pi
 # longitude=149.1310
 
 # datetime.datetime(YEAR, MON, DAY, HOUR, MIN, SEC)
-time = datetime.datetime(2026, 7, 24, 22, 0, 0)
+time = datetime.datetime(2026, 7, 25, 0, 0, 0)
 
 # # Object coordinates
 # azimuth=283.7
@@ -128,9 +128,12 @@ def calcAzimuthalCoords(starName, latitude, longitude):
 
 	print("Altitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI)
 
-lat=40.71273
-long=-74.00602
-calcAzimuthalCoords("Deneb", lat*PI/180, long*PI/180)
+lat = -26.20500
+long = 28.04972
+# calcAzimuthalCoords("Pollux", lat*PI/180, long*PI/180)
+alt=-82
+azi=44
+calcCoords(alt*PI/180, azi*PI/180, lat*PI/180, long*PI/180)
 
 # commandLength = len(sys.argv)
 
@@ -162,6 +165,9 @@ calcAzimuthalCoords("Deneb", lat*PI/180, long*PI/180)
 # 	elif city.lower().strip() == "new york city" or city.lower().strip() == "nyc":
 # 		lat = 40.7128
 # 		long = -74.0060
+# 	elif city.lower().strip() == "Johannesburg":
+# 		lat = -26.20500
+# 		long = 28.04972
 # 	else:
 # 		print("City not recognized")
 # 		exit()
