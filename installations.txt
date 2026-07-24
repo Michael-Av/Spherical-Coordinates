@@ -1,4 +1,5 @@
 sudo apt install python3-pip
 export PATH=$PATH:~/.local/bin // should go in .bashrc
+// May need to create a virtual environment to allow pip installations
 pip install timezonefinder
 pip install pytz
