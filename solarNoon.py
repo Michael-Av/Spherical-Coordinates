@@ -28,7 +28,7 @@ def getSaoTomeSolarNoon(userLocalTime):
             file.readline()
 
         solarNoon = file.readline()
-        print("sao tome solar noon:", solarNoon)
+        # print("sao tome solar noon:", solarNoon)
         return solarNoon[0:5]
 
 def calculateSolarNoon(userTimeZone, userLongitude, time):

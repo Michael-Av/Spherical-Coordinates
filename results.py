@@ -1,0 +1,86 @@
+import calculateCoordinates as coords
+import readLeData as rld
+import numpy as np
+import datetime
+import display
+
+PI = np.pi
+
+time = datetime.datetime.now()
+lat = 40.7
+long = -74
+# alt=45
+# azi=0
+# rightAscension, declination = coords.calcCelestialCoords(alt*PI/180, azi*PI/180, lat*PI/180, long*PI/180, time)
+# nearestStar = rld.findNearestStar(rightAscension, declination)
+
+# print("declination = ", declination*180/PI)
+# print("rightAscension = ", rightAscension*12/PI)
+# print("ANSWER!!!!", nearestStar)
+
+# rightAscension, declination = rld.getEquatorialCoords("Pollux")
+# coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
+
+# commandLength = len(sys.argv)
+
+# altitude = float(sys.argv[1])*PI/180
+# azimuth = float(sys.argv[2])*PI/180
+# # python3 calculateCoordinates.py altitude azimuth latitude longitude
+# if commandLength == 5:
+# 	lat = float(sys.argv[3])*PI/180
+# 	long = float(sys.argv[4])*PI/180
+# 	calcCelestialCoords(altitude, azimuth, lat, long)
+# # python3 calculateCoordinates.py altitude azimuthHour azimuthMinute latitude longitude
+# elif commandLength == 6:
+# 	azimuthHr = float(sys.argv[2]) * PI / 12
+# 	azimuthMin = float(sys.argv[3]) * PI / 720
+# 	lat = float(sys.argv[4])*PI/180
+# 	long = float(sys.argv[5])*PI/180
+# 	calcCelestialCoords(altitude, azimuthHr + azimuthMin, lat, long)
+# # python3 calculateCoordinates.py altitude azimuth city
+# elif commandLength == 4:
+# 	lat = 0
+# 	long = 0
+# 	city = sys.argv[3]
+# 	if city.lower().strip() == "binghamton":
+# 		lat = 42.0894
+# 		long = -75.9695
+# 	elif city.lower().strip() == "rochester":
+# 		lat = 43.1306
+# 		long = -77.6260
+# 	elif city.lower().strip() == "new york city" or city.lower().strip() == "nyc":
+# 		lat = 40.7128
+# 		long = -74.0060
+# 	elif city.lower().strip() == "Johannesburg":
+# 		lat = -26.20500
+# 		long = 28.04972
+# 	else:
+# 		print("City not recognized")
+# 		exit()
+# 	lat = lat * PI / 180
+# 	long = long * PI / 180
+# 	calcCelestialCoords(altitude, azimuth, lat, long)
+# else:
+# 	print("Command not recognized: try using a correct format L")
+# 	exit()
+
+allCoords = rld.getAllEquatorialCoords()
+visibleStarsNames = []
+visibleStarsAltitudes = []
+visibleStarsAzimuths = []
+i = 0
+for coord in allCoords:
+    if i<100:
+        name, rightAscension, declination = coord
+        altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
+        if altitude>0:
+            print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
+            visibleStarsNames.append(name)
+            visibleStarsAltitudes.append(altitude)
+            visibleStarsAzimuths.append(azimuth)
+    i+=1
+
+display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
+        
+        
+        

@@ -53,3 +53,14 @@ def getEquatorialCoords(starName):
             if starName == name1 or starName == name2:
                 print("match found")
                 return parseEquatorialCoords(line)
+
+def getAllEquatorialCoords():
+    allCoords = []
+    with open("stars.txt") as file:
+        file.readline()
+        for line in file:
+            name2 = line[26:44].strip()
+            coords = [name2]
+            coords.extend(parseEquatorialCoords(line))
+            allCoords.append(coords)
+    return allCoords
