@@ -84,16 +84,12 @@ if (args.time != None):
         if index == 2: time = time.replace(minute = args.time[i])
         if index == 1: time = time.replace(second = args.time[i])
 
-if (args.identifyStar != None):
+if (args.identifyStar != None): # identify a given star instead of displaying the map
     azimuth, altitude = args.identifyStar
     rightAscension, declination = coords.calcCelestialCoords(altitude*PI/180, azimuth*PI/180, lat*PI/180, long*PI/180, time)
     nearestStar = rld.findNearestStar(rightAscension, declination)
-    print("ANSWER!!!!", nearestStar)
+    print("You are looking at", nearestStar, "with estimated coordinates (RA, dec) = (", rightAscension * 12/PI, ",", declination * 180/PI, ")")
     exit(0)
-
-print("lat:", lat)
-print("long:", long)
-print("time:", time)
 
 allCoords = rld.getAllEquatorialCoords()
 visibleStarsNames = []
