@@ -1,14 +1,12 @@
 import calculateCoordinates as coords
 import readLeData as rld
 import numpy as np
-import datetime
+import datetime as dt
 import display
+import argparse
 
 PI = np.pi
 
-time = datetime.datetime.now()
-lat = 40.7
-long = -74
 # alt=45
 # azi=0
 # rightAscension, declination = coords.calcCelestialCoords(alt*PI/180, azi*PI/180, lat*PI/180, long*PI/180, time)
@@ -64,23 +62,45 @@ long = -74
 # 	print("Command not recognized: try using a correct format L")
 # 	exit()
 
-allCoords = rld.getAllEquatorialCoords()
-visibleStarsNames = []
-visibleStarsAltitudes = []
-visibleStarsAzimuths = []
-i = 0
-for coord in allCoords:
-    if i<100:
-        name, rightAscension, declination = coord
-        altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
-        if altitude>0:
-            print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
-            visibleStarsNames.append(name)
-            visibleStarsAltitudes.append(altitude)
-            visibleStarsAzimuths.append(azimuth)
-    i+=1
+# -- command line arguments --
 
-display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
-        
-        
+parser = argparse.ArgumentParser()
+parser.add_argument("position", type=float, nargs=2, metavar=("lat","long"), help="Provide the latitude and longitude of the observer")
+parser.add_argument("-t", "--time", type=int, nargs='*', help="Provide the time of observance (format year mon day 24hr min sec); omitting higher orders assumes current")
+
+args = parser.parse_args()
+
+lat, long = args.position
+time = dt.datetime.now()
+if (args.time != None):
+    for i in range(len(args.time)):
+        index = len(args.time) - i
+        if index == 6: time = time.replace(year = args.time[i])
+        if index == 5: time = time.replace(month = args.time[i])
+        if index == 4: time = time.replace(day = args.time[i])
+        if index == 3: time = time.replace(hour = args.time[i])
+        if index == 2: time = time.replace(minute = args.time[i])
+        if index == 1: time = time.replace(second = args.time[i])
+
+print("lat:", lat)
+print("long:", long)
+print("time:", time)
+
+# allCoords = rld.getAllEquatorialCoords()
+# visibleStarsNames = []
+# visibleStarsAltitudes = []
+# visibleStarsAzimuths = []
+# i = 0
+# for coord in allCoords:
+#     if i<100:
+#         name, rightAscension, declination = coord
+#         altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
+#         if altitude>0:
+#             print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
+#             visibleStarsNames.append(name)
+#             visibleStarsAltitudes.append(altitude)
+#             visibleStarsAzimuths.append(azimuth)
+#     i+=1
+
+# display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
         
