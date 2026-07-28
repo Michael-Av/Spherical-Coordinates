@@ -65,8 +65,10 @@ PI = np.pi
 # -- command line arguments --
 
 parser = argparse.ArgumentParser()
-parser.add_argument("position", type=float, nargs=2, metavar=("lat","long"), help="Provide the latitude and longitude of the observer")
-parser.add_argument("-t", "--time", type=int, nargs='*', help="Provide the time of observance (format year mon day 24hr min sec); omitting higher orders assumes current")
+parser.add_argument("position", type=float, nargs=2, metavar=("LAT","LONG"), help="Provide the latitude and longitude of the observer")
+parser.add_argument("-t", "--time", type=int, nargs='*', help="Provide the time of observance (format year mon day 24hr min sec); omitting higher orders assumes current (deafult now)")
+parser.add_argument("-n", "--numStars", type=int, help="Provide the maximum number of stars to display on the map (deafult 25)", default=25)
+parser.add_argument("-i", "--identifyStar", type=float, nargs=2, metavar=("AZIMUTH", "ALTITUDE"), help="Provide the azimuth and altitude in degrees of a star to identify")
 
 args = parser.parse_args()
 
@@ -82,25 +84,32 @@ if (args.time != None):
         if index == 2: time = time.replace(minute = args.time[i])
         if index == 1: time = time.replace(second = args.time[i])
 
+if (args.identifyStar != None):
+    azimuth, altitude = args.identifyStar
+    rightAscension, declination = coords.calcCelestialCoords(altitude*PI/180, azimuth*PI/180, lat*PI/180, long*PI/180, time)
+    nearestStar = rld.findNearestStar(rightAscension, declination)
+    print("ANSWER!!!!", nearestStar)
+    exit(0)
+
 print("lat:", lat)
 print("long:", long)
 print("time:", time)
 
-# allCoords = rld.getAllEquatorialCoords()
-# visibleStarsNames = []
-# visibleStarsAltitudes = []
-# visibleStarsAzimuths = []
-# i = 0
-# for coord in allCoords:
-#     if i<100:
-#         name, rightAscension, declination = coord
-#         altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
-#         if altitude>0:
-#             print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
-#             visibleStarsNames.append(name)
-#             visibleStarsAltitudes.append(altitude)
-#             visibleStarsAzimuths.append(azimuth)
-#     i+=1
+allCoords = rld.getAllEquatorialCoords()
+visibleStarsNames = []
+visibleStarsAltitudes = []
+visibleStarsAzimuths = []
+starCount = 0
+for coord in allCoords:
+    if starCount < args.numStars:
+        name, rightAscension, declination = coord
+        altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
+        if altitude>0:
+            print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
+            visibleStarsNames.append(name)
+            visibleStarsAltitudes.append(altitude)
+            visibleStarsAzimuths.append(azimuth)
+            starCount += 1
 
-# display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
+display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
         
