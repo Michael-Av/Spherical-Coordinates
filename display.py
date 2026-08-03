@@ -18,7 +18,7 @@ def plotVisibleStars(names, altitudes, azimuths):
     radiiVals = [10, 20, 30, 40, 50, 60, 70, 80, 90]
     tickLabels = ["80\xb0", "70\xb0", "60\xb0", "50\xb0", "40\xb0", "30\xb0", "20\xb0", "10\xb0", "0\xb0"]
     plt.rgrids(radiiVals, labels=tickLabels)
-    ax.set_rmax(90)
+    ax.set_ylim(0,90)
 
     ax.scatter(azimuths, invertedAltitudes)
     for i in range(len(azimuths)):

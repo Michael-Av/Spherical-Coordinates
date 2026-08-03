@@ -74,6 +74,7 @@ args = parser.parse_args()
 
 lat, long = args.position
 time = dt.datetime.now()
+print("time set to now")
 if (args.time != None):
     for i in range(len(args.time)):
         index = len(args.time) - i
@@ -83,6 +84,7 @@ if (args.time != None):
         if index == 3: time = time.replace(hour = args.time[i])
         if index == 2: time = time.replace(minute = args.time[i])
         if index == 1: time = time.replace(second = args.time[i])
+    print("time overridden")
 
 if (args.identifyStar != None): # identify a given star instead of displaying the map
     azimuth, altitude = args.identifyStar
