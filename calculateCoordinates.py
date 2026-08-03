@@ -54,12 +54,11 @@ def calcCelestialCoords(altitude, azimuth, latitude, longitude, time):
 		rightAscension += 2 * PI
 	return [rightAscension, declination]
 
-def calcHorizontalCoords(rightAscension, declination, latitude, longitude, time):
+def calcHorizontalCoords(rightAscension, declination, latitude, longitude, siderealTime):
 	minLatitude=-PI/2.01
 	maxLatitude=PI/2.01
 	latitude = min(maxLatitude, max(minLatitude, latitude))
 	#print(latitude)
-	siderealTime = st.getSiderealTime(latitude, longitude, time)
 
 	# le Plan
 

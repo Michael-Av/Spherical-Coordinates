@@ -4,6 +4,7 @@ import numpy as np
 import datetime as dt
 import display
 import argparse
+import siderealTime as st
 
 PI = np.pi
 
@@ -85,6 +86,8 @@ if (args.time != None):
         if index == 2: time = time.replace(minute = args.time[i])
         if index == 1: time = time.replace(second = args.time[i])
 
+siderealTime = st.getSiderealTime(lat*PI/180, long*PI/180, time)
+
 if (args.identifyStar != None): # identify a given star instead of displaying the map
     if (args.trajectory): raise ValueError("--trajectory and --identifyStar flags are incompatible")
 
@@ -102,7 +105,7 @@ starCount = 0
 for coord in allCoords:
     if starCount < args.numStars:
         name, rightAscension, declination = coord
-        altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time)
+        altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime)
         if altitude>0:
             print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
             visibleStarsNames.append(name)
@@ -110,7 +113,7 @@ for coord in allCoords:
             visibleStarsAzimuths.append(azimuth)
             starCount += 1
             if args.trajectory:
-                future_altitude, future_azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time + dt.timedelta(hours=1))
+                future_altitude, future_azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime + PI/12)
                 visibleStarsAltitudes.append(future_altitude)
                 visibleStarsAzimuths.append(future_azimuth)
 
