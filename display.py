@@ -4,10 +4,11 @@ PI = np.pi
 
 plt.style.use('dark_background')
 
+# if 2 * len(names) = len(altitudes) = len(azimuths), then trajectories are to be plotted
 def plotVisibleStars(names, altitudes, azimuths):
-    names.append("")
-    altitudes.append(5*PI/180)
-    azimuths.append(0)
+    # names.append("")
+    # altitudes.append(5*PI/180)
+    # azimuths.append(0)
     invertedAltitudes = []
     for alt in altitudes:
         invertedAltitudes.append((PI/2 - alt)*180/PI)
@@ -20,9 +21,20 @@ def plotVisibleStars(names, altitudes, azimuths):
     plt.rgrids(radiiVals, labels=tickLabels)
     ax.set_ylim(0,90)
 
-    ax.scatter(azimuths, invertedAltitudes)
-    for i in range(len(azimuths)):
-        # print(names[i], azimuths[i])
-        plt.text(azimuths[i], invertedAltitudes[i], names[i])
+    if (2 * len(names) == len(altitudes)): # trajectorie
+        ax.scatter(azimuths[::2], invertedAltitudes[::2])
+        index = 0
+        while index < len(names):
+            if (names[index] == 'Polaris'): index += 1 # manually override drawing trajectory for Polaris
+            start = (azimuths[2*index], invertedAltitudes[2*index])
+            end = (azimuths[2*index+1], invertedAltitudes[2*index+1])
+            ax.annotate('', xy=end, xytext=start, xycoords='data', textcoords='data', arrowprops=dict(arrowstyle="->", color="white", lw=2))
+            index += 1
+        for i in range(len(names)):
+            plt.text(azimuths[2*i], invertedAltitudes[2*i], names[i])
+    else:
+        ax.scatter(azimuths, invertedAltitudes)
+        for i in range(len(azimuths)):
+            plt.text(azimuths[i], invertedAltitudes[i], names[i])
 
     plt.show()

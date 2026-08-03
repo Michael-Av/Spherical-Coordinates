@@ -69,12 +69,12 @@ parser.add_argument("position", type=float, nargs=2, metavar=("LAT","LONG"), hel
 parser.add_argument("-t", "--time", type=int, nargs='*', help="Provide the time of observance (format year mon day 24hr min sec); omitting higher orders assumes current (deafult now)")
 parser.add_argument("-n", "--numStars", type=int, help="Provide the maximum number of stars to display on the map (deafult 25)", default=25)
 parser.add_argument("-i", "--identifyStar", type=float, nargs=2, metavar=("AZIMUTH", "ALTITUDE"), help="Provide the azimuth and altitude in degrees of a star to identify")
+parser.add_argument("-r", "--trajectory", action='store_true', help="Display trajectory arrows on map")
 
 args = parser.parse_args()
 
 lat, long = args.position
 time = dt.datetime.now()
-print("time set to now")
 if (args.time != None):
     for i in range(len(args.time)):
         index = len(args.time) - i
@@ -84,9 +84,10 @@ if (args.time != None):
         if index == 3: time = time.replace(hour = args.time[i])
         if index == 2: time = time.replace(minute = args.time[i])
         if index == 1: time = time.replace(second = args.time[i])
-    print("time overridden")
 
 if (args.identifyStar != None): # identify a given star instead of displaying the map
+    if (args.trajectory): raise ValueError("--trajectory and --identifyStar flags are incompatible")
+
     azimuth, altitude = args.identifyStar
     rightAscension, declination = coords.calcCelestialCoords(altitude*PI/180, azimuth*PI/180, lat*PI/180, long*PI/180, time)
     nearestStar = rld.findNearestStar(rightAscension, declination)
@@ -108,6 +109,10 @@ for coord in allCoords:
             visibleStarsAltitudes.append(altitude)
             visibleStarsAzimuths.append(azimuth)
             starCount += 1
+            if args.trajectory:
+                future_altitude, future_azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, time + dt.timedelta(hours=1))
+                visibleStarsAltitudes.append(future_altitude)
+                visibleStarsAzimuths.append(future_azimuth)
 
 display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
         
