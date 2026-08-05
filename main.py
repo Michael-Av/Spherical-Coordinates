@@ -1,10 +1,10 @@
-import calculateCoordinates as coords
-import readLeData as rld
+import Code.calculateCoordinates as coords
+import Code.readLeData as rld
 import numpy as np
 import datetime as dt
 import display
 import argparse
-import siderealTime as st
+import Code.siderealTime as st
 
 PI = np.pi
 
