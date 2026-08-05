@@ -31,7 +31,7 @@ for i in range(1, len(axis_points)+1):
 axes = pv.PolyData(axis_points, lines=pv.CellArray.from_regular_cells(connection_indices))
 
 # stars
-phi_vals = np.random.rand(100) * 2*np.pi
+phi_vals = np.random.rand(100) * np.pi / 2
 theta_vals = np.random.rand(100) * 2*np.pi
 
 star_x = 0.9 * np.sin(theta_vals) * np.cos(phi_vals)
