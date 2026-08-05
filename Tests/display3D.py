@@ -26,6 +26,17 @@ def createAxesGrid():
     axes = pv.PolyData(axis_points, lines=pv.CellArray.from_regular_cells(connection_indices))
     return axes
 
+def get_horizon_labels():
+    result = []
+    for i in range(0, 360, 10):
+        if i % 90 != 0: result.append(str(360-i) + "°")
+        if i == 0: result.append("North")
+        if i == 90: result.append("West")
+        if i == 180: result.append("South")
+        if i == 270: result.append("East")
+    result.append("placeholder")
+    return result
+
 def plotVisibleStars(names, altitudes, azimuths):
     phi_values = [0]*len(altitudes)
     for i in range(len(altitudes)):
@@ -52,7 +63,11 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl.add_mesh(background_sphere, color='black', show_edges=True)
     pl.add_mesh(axes, color='red')
     pl.add_mesh(stars, color='white')
+
     pl.add_point_labels(stars, names)
+    pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30)
+    pl.add_point_labels(axes.points[27::36], get_horizon_labels()[18:], font_size = 30)
+
 
     Tests.cameraHandler.initialize(pl)
 
