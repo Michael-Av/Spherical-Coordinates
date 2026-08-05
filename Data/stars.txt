@@ -2,7 +2,7 @@ Star Name                 Other Name        RA    Dec                 SpecralTyp
 Alpha Canis Majoris       Sirius            06 45 -16.7  227.2  -8.9  A1V          -1.44  1.45  379.21 1.58     9
 Alpha Carinae             Canopus           06 24 -52.7  261.2 -25.3  F0Ib         -0.62 -5.53   10.43 0.53   310
 Alpha Centauri            Rigil Kentaurus   14 40 -60.8  315.8  -0.7  G2V+K1V      -0.27  4.08  742.12 1.40     4
-Alpha Bo?is               Arcturus          14 16 +19.2   15.2 +69.0  K2III        -0.05 -0.31   88.85 0.74    37
+Alpha Bootis              Arcturus          14 16 +19.2   15.2 +69.0  K2III        -0.05 -0.31   88.85 0.74    37
 Alpha Lyrae               Vega              18 37 +38.8   67.5 +19.2  A0V           0.03  0.58  128.93 0.55    25
 Alpha Aurigae             Capella           05 17 +46.0  162.6  +4.6  G5III+G0III   0.08 -0.48   77.29 0.89    42
 Beta Orionis              Rigel             05 15 -08.2  209.3 -25.1  B8Ia          0.18 -6.69    4.22 0.81   770
@@ -108,7 +108,7 @@ Alpha Columbae            Phact             05 40 -34.1  238.9 -28.8  B7IV      
 Theta Aurigae             Theta Aurigae     06 00 +37.2  174.4  +6.8  A0III+G2V     2.65 -0.98   18.83 0.81   170
 Beta Corvi                Kraz              12 34 -23.4  297.8 +39.3  G5III         2.65 -0.51   23.34 0.80   140
 Delta Cassiopeiae         Ruchbah           01 26 +60.2  127.2  -2.4  A5III         2.66  0.24   32.81 0.62    99
-Eta Bo?is                 Muphrid           13 55 +18.4    5.5 +73.0  G0IV          2.68  2.41   88.17 0.75    37
+Eta Bootis                Muphrid           13 55 +18.4    5.5 +73.0  G0IV          2.68  2.41   88.17 0.75    37
 Beta Lupi                 Ke Kouan          14 59 -43.1  326.4 +13.9  B2III         2.68 -3.35    6.23 0.71   520
 Iota Aurigae              Hassaleh          04 57 +33.2  170.6  -6.1  K3II          2.69 -3.29    6.37 0.96   510
 Mu Velorum                Mu Velorum        10 47 -49.4  283.1  +8.6  G5III+G2V     2.69 -0.06   28.18 0.49   116
@@ -181,7 +181,7 @@ Omicron2 Canis Majoris    o^2 CMa           07 03 -23.8  235.6  -8.2  B3Ia      
 Epsilon Corvi             Minkar            12 10 -22.6  290.6 +39.3  K2II          3.02 -1.82   10.75 0.71   300
 Epsilon Aurigae           Almaaz            05 02 +43.8  162.8  +1.2  F0Ia          3.03 -5.95    1.60 1.16  2000
 Beta Muscae               Beta Muscae       12 46 -68.1  302.5  -5.2  B2V+B3V       3.04 -1.86   10.48 0.65   310
-Gamma Boois               Seginus           14 32 +38.3   67.3 +66.2  A7III         3.04  0.96   38.29 0.73    85
+Gamma Bootis              Seginus           14 32 +38.3   67.3 +66.2  A7III         3.04  0.96   38.29 0.73    85
 Beta Capricorni           Dabih             20 21 -14.8   29.2 -26.4  G5II+A0V      3.05 -2.07    9.48 0.95   340
 Epsilon Geminorum         Mebsuta           06 44 +25.1  189.5  +9.6  G8Ib          3.06 -4.15    3.61 0.91   900
 Mu Ursae Majoris          Tania Australis   10 22 +41.5  177.9 +56.4  M0III         3.06 -1.35   13.11 0.75   250
