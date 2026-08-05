@@ -5,3 +5,4 @@ pip install timezonefinder
 pip install pytz
 pip install numpy
 pip install matplotlib
+pip install pyvista
