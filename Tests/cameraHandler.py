@@ -5,11 +5,11 @@ EYE_POS = np.array([0.0, 0.0, 0.0])
 # Track rotation and FOV states
 # Default view_angle is usually 30 degrees in VTK
 state = {
-    "yaw": 0.0, 
-    "pitch": 0.0, 
+    "yaw": 90.0, 
+    "pitch": -20.0, 
     "last_pos": None, 
     "dragging": False,
-    "fov": 90.0,  # Tracks our field of view angle
+    "fov": 30.0,  # Tracks our field of view angle
     "plot": None     # Temporary, this will be set to the 3D plot when the program starts
 }
 
@@ -48,8 +48,8 @@ def on_mouse_move(iren, event):
 # --- OPTICAL ZOOM SYSTEM (FIELD OF VIEW) ---
 def on_mouse_wheel_forward(iren, event):
     # Narrows the field of view to zoom IN
-    # Stay within a realistic range (e.g., 2 degrees minimum)
-    state["fov"] = max(2.0, state["fov"] - 2.0)
+    # Stay within a realistic range (e.g., 10 degrees minimum)
+    state["fov"] = max(10.0, state["fov"] - 3.0)
     
     state["plot"].camera.position = EYE_POS # Ensure position didn't slide
     state["plot"].camera.view_angle = state["fov"]
@@ -58,7 +58,7 @@ def on_mouse_wheel_forward(iren, event):
 def on_mouse_wheel_backward(iren, event):
     # Widens the field of view to zoom OUT (fish-eye style)
     # Stay within a realistic range (e.g., 120 degrees maximum)
-    state["fov"] = min(120.0, state["fov"] + 2.0)
+    state["fov"] = min(120.0, state["fov"] + 3.0)
     
     state["plot"].camera.position = EYE_POS # Ensure position didn't slide
     state["plot"].camera.view_angle = state["fov"]
@@ -68,6 +68,8 @@ def initialize(plot):
     # Intercept default interactor controls
     plot.camera.position = EYE_POS
     plot.camera.focal_point = EYE_POS
+    #plot.camera.azimuth = 90.0
+    plot.camera.zoom(0.5)
 
     iren = plot.render_window.GetInteractor()
     state["plot"] = plot
