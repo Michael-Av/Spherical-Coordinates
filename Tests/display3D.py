@@ -34,7 +34,6 @@ def get_horizon_labels():
         if i == 90: result.append("West")
         if i == 180: result.append("South")
         if i == 270: result.append("East")
-    result.append("placeholder")
     return result
 
 def plotVisibleStars(names, altitudes, azimuths):
@@ -50,8 +49,21 @@ def plotVisibleStars(names, altitudes, azimuths):
     star_y = 0.9 * np.sin(phi_values) * np.sin(theta_values)
     star_z = 0.9 * np.cos(phi_values)
 
+    label_phis = phi_values.copy()
+    label_thetas = theta_values.copy()
+    for i in range(len(label_phis)):
+        label_phis[i] -= 0.005
+        # label_thetas[i] += 0.05
+
+    label_x = 0.9 * np.sin(label_phis) * np.cos(label_thetas)
+    label_y = 0.9 * np.sin(label_phis) * np.sin(label_thetas)
+    label_z = 0.9 * np.cos(label_phis)
+
     star_positions = np.column_stack((star_x,star_y,star_z))
+    label_positions = np.column_stack((label_x, label_y, label_z))
+
     stars = pv.PolyData(star_positions)
+    # labels = pv.PolyData(label_positions)
 
     # background sphere
     background_sphere = pv.Sphere(radius=1)
@@ -64,10 +76,12 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl.add_mesh(axes, color='red')
     pl.add_mesh(stars, color='white')
 
-    pl.add_point_labels(stars, names)
-    pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30)
-    pl.add_point_labels(axes.points[27::36], get_horizon_labels()[18:], font_size = 30)
+    # print(len(labels.points))
+    print(len(names))
 
+    pl.add_point_labels(label_positions, names, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+    pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
+    pl.add_point_labels(axes.points[27:640:36], get_horizon_labels()[18:], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
 
     Tests.cameraHandler.initialize(pl)
 
