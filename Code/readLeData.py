@@ -59,8 +59,10 @@ def getAllEquatorialCoords():
     with open("Data/stars.txt") as file:
         file.readline()
         for line in file:
-            name2 = line[26:44].strip()
-            coords = [name2]
+            name = line[26:44].strip()
+            if not name:
+                name = line[:26].strip()
+            coords = [name]
             coords.extend(parseEquatorialCoords(line))
             allCoords.append(coords)
     return allCoords
