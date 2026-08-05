@@ -27,7 +27,7 @@ def parseEquatorialCoords(line):
 def findNearestStar(userRA, userDec):
     shortestDist = 20
     closestStar = ""
-    with open("stars.txt") as file:
+    with open("Data/stars.txt") as file:
         file.readline()
         for line in file:
             name = line[26:44].strip()
@@ -45,7 +45,7 @@ def findNearestStar(userRA, userDec):
 
 def getEquatorialCoords(starName):
     starName = starName.lower()
-    with open("stars.txt") as file:
+    with open("Data/stars.txt") as file:
         for line in file:
             name1 = line[:26].strip().lower()
             name2 = line[26:44].strip().lower()
@@ -56,7 +56,7 @@ def getEquatorialCoords(starName):
 
 def getAllEquatorialCoords():
     allCoords = []
-    with open("stars.txt") as file:
+    with open("Data/stars.txt") as file:
         file.readline()
         for line in file:
             name2 = line[26:44].strip()
@@ -66,7 +66,7 @@ def getAllEquatorialCoords():
     return allCoords
 
 # def addConstellations():
-#     newfile = open("stars2.txt", "r")
+#     newfile = open("Data/stars2.txt", "r")
 #     constellationsFile = open("constellations.txt")
 #     with open("stars.txt") as file:
 #         header = next(file)

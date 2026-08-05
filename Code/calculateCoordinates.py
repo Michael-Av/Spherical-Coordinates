@@ -1,7 +1,7 @@
 import numpy as np
 import math
-import siderealTime as st
-import readLeData as rld
+import Code.siderealTime as st
+import Code.readLeData as rld
 
 PI = np.pi
 
