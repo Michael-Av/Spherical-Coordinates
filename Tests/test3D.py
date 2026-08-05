@@ -1,22 +1,28 @@
 import pyvista as pv
 import numpy as np
 
+background_sphere = pv.Sphere(radius=1)
+
+phi_vals = np.random.rand(100) * 2*np.pi
+theta_vals = np.random.rand(100) * 2*np.pi
+
+x = 0.9 * np.sin(theta_vals) * np.cos(phi_vals)
+y = 0.9 * np.sin(theta_vals) * np.sin(phi_vals)
+z = 0.9 * np.cos(theta_vals)
+
+star_positions = np.column_stack((x,y,z))
+
+stars = pv.PolyData(star_positions)
+
 pl = pv.Plotter()
-
-grid = pv.ImageData(dimensions=(10, 10, 10), spacing=(1, 1, 1), origin=(0, 0, 0))
-pl.add_mesh(grid, show_edges=True, color='lightgray', opacity=0.3)
-pl.add_axes()
-#pl.add_mesh(pv.Cube(center=(5, 5, 2)), color='tomato')
-
-points = np.random.rand(100, 3)
-cloud = pv.PolyData(points)
-pl.add_mesh(cloud, style='points', color='red')
+pl.add_mesh(background_sphere, color='black', show_edges=True)
+pl.add_mesh(stars, color='white')
 
 
 # 2. Fix the initial position (standing in one spot)
-EYE_POS = np.array([5.0, 5.0, 2.0])
+EYE_POS = np.array([0.0, 0.0, 0.0])
 pl.camera.position = EYE_POS
-pl.camera.focal_point = (5.0, 5.0, 2.0)
+pl.camera.focal_point = (0.0, 0.0, 0.0)
 
 # Track rotation and FOV states
 # Default view_angle is usually 30 degrees in VTK
