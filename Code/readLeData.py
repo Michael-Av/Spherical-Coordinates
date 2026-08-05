@@ -64,14 +64,3 @@ def getAllEquatorialCoords():
             coords.extend(parseEquatorialCoords(line))
             allCoords.append(coords)
     return allCoords
-
-# def addConstellations():
-#     newfile = open("Data/stars2.txt", "r")
-#     constellationsFile = open("constellations.txt")
-#     with open("stars.txt") as file:
-#         header = next(file)
-#         header = header + "Const"
-#         for line in file:
-
-
-# addConstellations()
