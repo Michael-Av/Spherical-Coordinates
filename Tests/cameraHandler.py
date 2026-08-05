@@ -9,7 +9,7 @@ state = {
     "pitch": 0.0, 
     "last_pos": None, 
     "dragging": False,
-    "fov": 30.0,  # Tracks our field of view angle
+    "fov": 90.0,  # Tracks our field of view angle
     "plot": None     # Temporary, this will be set to the 3D plot when the program starts
 }
 
