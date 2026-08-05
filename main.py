@@ -3,6 +3,7 @@ import Code.readLeData as rld
 import numpy as np
 import datetime as dt
 import display
+import Tests.display3D as display3D
 import argparse
 import Code.siderealTime as st
 
@@ -117,5 +118,5 @@ for coord in allCoords:
                 visibleStarsAltitudes.append(future_altitude)
                 visibleStarsAzimuths.append(future_azimuth)
 
-display.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
+display3D.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
         

@@ -9,9 +9,9 @@ def plotVisibleStars(names, altitudes, azimuths):
     # names.append("")
     # altitudes.append(5*PI/180)
     # azimuths.append(0)
-    invertedAltitudes = []
-    for alt in altitudes:
-        invertedAltitudes.append((PI/2 - alt)*180/PI)
+    invertedAltitudes = [0]*len(altitudes)
+    for i in range(len(altitudes)):
+        invertedAltitudes[i] = (PI/2 - altitudes[i])*180/PI
     
     fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
     ax.set_theta_zero_location("N")
