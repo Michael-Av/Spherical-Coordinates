@@ -113,17 +113,16 @@ for coord in allCoords:
     if starCount < args.numStars:
         name, rightAscension, declination, apparentMagnitude = coord
         altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime)
-        if altitude>0:
-            print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
-            visibleStarsNames.append(name)
-            visibleStarsAltitudes.append(altitude)
-            visibleStarsAzimuths.append(azimuth)
-            visibleStarApparentMagnitudes.append(apparentMagnitude)
-            starCount += 1
-            if args.trajectory:
-                future_altitude, future_azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime + PI/12)
-                visibleStarsAltitudes.append(future_altitude)
-                visibleStarsAzimuths.append(future_azimuth)
+        print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
+        visibleStarsNames.append(name)
+        visibleStarsAltitudes.append(altitude)
+        visibleStarsAzimuths.append(azimuth)
+        visibleStarApparentMagnitudes.append(apparentMagnitude)
+        starCount += 1
+        if args.trajectory:
+            future_altitude, future_azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime + PI/12)
+            visibleStarsAltitudes.append(future_altitude)
+            visibleStarsAzimuths.append(future_azimuth)
 
 display3D.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths, visibleStarApparentMagnitudes, args.labels)
         

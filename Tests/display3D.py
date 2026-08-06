@@ -18,7 +18,7 @@ def createAxesGrid():
     axis_points = np.column_stack((x_axis_points,y_axis_points,z_axis_points))
 
     connection_indices = []
-    for i in range(1, len(axis_points)+1):
+    for i in range(1, len(axis_points)):
         connection_indices.append([i,i-1]) # connects altitude lines
         if i >= 36:
             connection_indices.append([i,i-36]) # connects azimuth lines
@@ -41,6 +41,22 @@ def getStarSizeScales(appMagnitudes):
     for appMagnitude in appMagnitudes:
         starScalars.append(-0.185*appMagnitude + 1.25)
     return starScalars
+
+def getGround():
+    phi_vals = np.radians(np.arange(0, 360, 10))
+    theta_vals = [np.pi/2]*36
+
+    points_x = np.sin(theta_vals) * np.cos(phi_vals)
+    points_y = np.sin(theta_vals) * np.sin(phi_vals)
+    points_z = np.cos(theta_vals)
+
+    points = np.column_stack((points_x, points_y, points_z))
+    
+    faces = [36]
+    faces.extend(range(36))
+
+    ground = pv.PolyData(points, faces=faces)
+    return ground
 
 def plotVisibleStars(names, altitudes, azimuths, appMagnitudes, showLabels):
     phi_values = [0]*len(altitudes)
@@ -85,6 +101,7 @@ def plotVisibleStars(names, altitudes, azimuths, appMagnitudes, showLabels):
     
     starSpheres = stars.glyph(geom=pv.Sphere(radius=0.004), scale="my_sizes", orient=False)
     pl.add_mesh(starSpheres, color='white', lighting=False)
+    pl.add_mesh(getGround(), name='ground', color='green', copy_mesh = False)
 
     # print(len(labels.points))
     print(len(names))
