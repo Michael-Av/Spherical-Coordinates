@@ -9,7 +9,7 @@ state = {
     "pitch": -20.0, 
     "last_pos": None, 
     "dragging": False,
-    "fov": 30.0,  # Tracks our field of view angle
+    "fov": 70.0,  # Tracks our field of view angle
     "plot": None     # Temporary, this will be set to the 3D plot when the program starts
 }
 
@@ -70,6 +70,7 @@ def initialize(plot):
     plot.camera.focal_point = EYE_POS
     #plot.camera.azimuth = 90.0
     plot.camera.zoom(0.5)
+    plot.camera.view_angle = state["fov"]
 
     iren = plot.render_window.GetInteractor()
     state["plot"] = plot

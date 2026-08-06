@@ -36,7 +36,13 @@ def get_horizon_labels():
         if i == 270: result.append("East")
     return result
 
-def plotVisibleStars(names, altitudes, azimuths):
+def getStarSizeScales(appMagnitudes):
+    starScalars = []
+    for appMagnitude in appMagnitudes:
+        starScalars.append(-0.185*appMagnitude + 1.25)
+    return starScalars
+
+def plotVisibleStars(names, altitudes, azimuths, appMagnitudes, showLabels):
     phi_values = [0]*len(altitudes)
     for i in range(len(altitudes)):
         phi_values[i] = np.pi/2 - altitudes[i]
@@ -74,14 +80,19 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl = pv.Plotter()
     pl.add_mesh(background_sphere, color='black', show_edges=True)
     pl.add_mesh(axes, color='red')
-    pl.add_mesh(stars, color='white')
+
+    stars["my_sizes"] = getStarSizeScales(appMagnitudes)
+    
+    starSpheres = stars.glyph(geom=pv.Sphere(radius=0.004), scale="my_sizes", orient=False)
+    pl.add_mesh(starSpheres, color='white', lighting=False)
 
     # print(len(labels.points))
     print(len(names))
 
-    pl.add_point_labels(label_positions, names, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
-    pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
-    pl.add_point_labels(axes.points[27:640:36], get_horizon_labels()[18:], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
+    if showLabels:
+        pl.add_point_labels(label_positions, names, text_color='white', font_size = 15, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+    pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 20, text_color='white', shape = None, always_visible = True, show_points=False)
+    pl.add_point_labels(axes.points[27:640:36], get_horizon_labels()[18:], font_size = 20, text_color='white', shape = None, always_visible = True, show_points=False)
 
     Tests.cameraHandler.initialize(pl)
 
