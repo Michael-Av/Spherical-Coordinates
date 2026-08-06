@@ -18,7 +18,7 @@ def createAxesGrid():
     axis_points = np.column_stack((x_axis_points,y_axis_points,z_axis_points))
 
     connection_indices = []
-    for i in range(1, len(axis_points)+1):
+    for i in range(1, len(axis_points)):
         connection_indices.append([i,i-1]) # connects altitude lines
         if i >= 36:
             connection_indices.append([i,i-36]) # connects azimuth lines
@@ -35,6 +35,22 @@ def get_horizon_labels():
         if i == 180: result.append("South")
         if i == 270: result.append("East")
     return result
+
+def getGround():
+    phi_vals = np.radians(np.arange(0, 360, 10))
+    theta_vals = [np.pi/2]*36
+
+    points_x = np.sin(theta_vals) * np.cos(phi_vals)
+    points_y = np.sin(theta_vals) * np.sin(phi_vals)
+    points_z = np.cos(theta_vals)
+
+    points = np.column_stack((points_x, points_y, points_z))
+    
+    faces = [36]
+    faces.extend(range(36))
+
+    ground = pv.PolyData(points, faces=faces)
+    return ground
 
 def plotVisibleStars(names, altitudes, azimuths):
     phi_values = [0]*len(altitudes)
@@ -75,6 +91,7 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl.add_mesh(background_sphere, color='black', show_edges=True)
     pl.add_mesh(axes, color='red')
     pl.add_mesh(stars, color='white')
+    pl.add_mesh(getGround(), color='green')
 
     # print(len(labels.points))
     print(len(names))
@@ -82,6 +99,7 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl.add_point_labels(label_positions, names, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
     pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
     pl.add_point_labels(axes.points[27:640:36], get_horizon_labels()[18:], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
+    # pl.add_point_labels(axes.points, range(len(axes.points)), font_size=20)
 
     Tests.cameraHandler.initialize(pl)
 

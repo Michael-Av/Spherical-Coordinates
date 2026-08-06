@@ -1,6 +1,6 @@
 import numpy as np
 
-EYE_POS = np.array([0.0, 0.0, 0.0])
+EYE_POS = np.array([0.0, 0.0, 0.05])
 
 # Track rotation and FOV states
 # Default view_angle is usually 30 degrees in VTK
@@ -65,7 +65,7 @@ def on_mouse_wheel_backward(iren, event):
     state["plot"].render()
 
 def initialize(plot):
-    # Intercept default interactor controls
+#     # Intercept default interactor controls
     plot.camera.position = EYE_POS
     plot.camera.focal_point = EYE_POS
     #plot.camera.azimuth = 90.0
