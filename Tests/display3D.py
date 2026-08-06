@@ -91,7 +91,7 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl.add_mesh(background_sphere, color='black', show_edges=True)
     pl.add_mesh(axes, color='red')
     pl.add_mesh(stars, color='white')
-    pl.add_mesh(getGround(), color='green')
+    pl.add_mesh(getGround(), name='ground', color='green', copy_mesh = False)
 
     # print(len(labels.points))
     print(len(names))

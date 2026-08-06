@@ -45,6 +45,16 @@ def on_mouse_move(iren, event):
     state["plot"].camera.focal_point = EYE_POS + look_dir
     state["plot"].render()
 
+    # adjust ground opacity if looking down
+    if state["pitch"] < 0:
+        return
+    actors = state["plot"].actors
+    opacity = 1 - 3*state["pitch"] / 90
+    if opacity < 0: opacity = 0
+    actors['ground'].prop.opacity = opacity
+    state['plot'].update()
+
+
 # --- OPTICAL ZOOM SYSTEM (FIELD OF VIEW) ---
 def on_mouse_wheel_forward(iren, event):
     # Narrows the field of view to zoom IN
