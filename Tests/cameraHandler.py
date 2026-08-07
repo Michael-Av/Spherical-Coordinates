@@ -10,7 +10,8 @@ state = {
     "last_pos": None, 
     "dragging": False,
     "fov": 30.0,  # Tracks our field of view angle
-    "plot": None     # Temporary, this will be set to the 3D plot when the program starts
+    "plot": None,     # Temporary, this will be set to the 3D plot when the program starts
+    "below_horizon_label_actor": None
 }
 
 # --- LOOK AROUND SYSTEM ---
@@ -45,13 +46,17 @@ def on_mouse_move(iren, event):
     state["plot"].camera.focal_point = EYE_POS + look_dir
     state["plot"].render()
 
-    # adjust ground opacity if looking down
+    # adjust ground opacity and below horizon labels if looking down
+    plot = state["plot"]
     if state["pitch"] < 0:
+        state["below_horizon_label_actor"].visibility = False
         return
-    actors = state["plot"].actors
-    opacity = 1 - 3*state["pitch"] / 90
+    opacity = 1 - 2*state["pitch"] / 90
     if opacity < 0: opacity = 0
-    actors['ground'].prop.opacity = opacity
+    plot.actors['ground'].prop.opacity = opacity
+
+    state["below_horizon_label_actor"].visibility = True
+    state['plot'].render()
     state['plot'].update()
 
 
@@ -74,7 +79,9 @@ def on_mouse_wheel_backward(iren, event):
     state["plot"].camera.view_angle = state["fov"]
     state["plot"].render()
 
-def initialize(plot):
+# 2nd argument is just to have access to it in the on_mouse_move() function
+# if there is a less ugly way to do this please tell me
+def initialize(plot, below_horizon_label_actor):
 #     # Intercept default interactor controls
     plot.camera.position = EYE_POS
     plot.camera.focal_point = EYE_POS
@@ -83,6 +90,7 @@ def initialize(plot):
 
     iren = plot.render_window.GetInteractor()
     state["plot"] = plot
+    state["below_horizon_label_actor"] = below_horizon_label_actor
 
     # Override rotation behaviors
     iren.RemoveObservers("LeftButtonPressEvent")

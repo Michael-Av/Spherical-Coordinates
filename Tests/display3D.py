@@ -52,6 +52,31 @@ def getGround():
     ground = pv.PolyData(points, faces=faces)
     return ground
 
+# returns above horizon labels, above horizon pos, below horizon labels, below horizon pos
+def getLabels(names, phi_values, theta_values):
+    label_phis = phi_values.copy()
+    label_thetas = theta_values.copy()
+    for i in range(len(label_phis)):
+        label_phis[i] -= 0.005
+
+    label_x = 0.9 * np.sin(label_phis) * np.cos(label_thetas)
+    label_y = 0.9 * np.sin(label_phis) * np.sin(label_thetas)
+    label_z = 0.9 * np.cos(label_phis)
+
+    label_positions = np.column_stack((label_x, label_y, label_z))
+
+    result = [[],[],[],[]]
+
+    for i in range(len(names)):
+        if label_positions[i][2] > 0: # above horizon
+            result[0].append(names[i])
+            result[1].append(label_positions[i])
+        else:
+            result[2].append(names[i])
+            result[3].append(label_positions[i])
+
+    return result
+
 def plotVisibleStars(names, altitudes, azimuths):
     phi_values = [0]*len(altitudes)
     for i in range(len(altitudes)):
@@ -65,18 +90,7 @@ def plotVisibleStars(names, altitudes, azimuths):
     star_y = 0.9 * np.sin(phi_values) * np.sin(theta_values)
     star_z = 0.9 * np.cos(phi_values)
 
-    label_phis = phi_values.copy()
-    label_thetas = theta_values.copy()
-    for i in range(len(label_phis)):
-        label_phis[i] -= 0.005
-        # label_thetas[i] += 0.05
-
-    label_x = 0.9 * np.sin(label_phis) * np.cos(label_thetas)
-    label_y = 0.9 * np.sin(label_phis) * np.sin(label_thetas)
-    label_z = 0.9 * np.cos(label_phis)
-
     star_positions = np.column_stack((star_x,star_y,star_z))
-    label_positions = np.column_stack((label_x, label_y, label_z))
 
     stars = pv.PolyData(star_positions)
     # labels = pv.PolyData(label_positions)
@@ -93,15 +107,18 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl.add_mesh(stars, color='white')
     pl.add_mesh(getGround(), name='ground', color='green', copy_mesh = False)
 
-    # print(len(labels.points))
     print(len(names))
 
-    pl.add_point_labels(label_positions, names, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+    above_horizon_labels, above_horizon_label_positions, below_horizon_labels, below_horizon_label_positions = getLabels(names, phi_values, theta_values)
+
+    pl.add_point_labels(above_horizon_label_positions, above_horizon_labels, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+    below_horizon_label_actor = pl.add_point_labels(below_horizon_label_positions, below_horizon_labels, name='below_horizon_labels', text_color='white', font_size = 30, always_visible = False, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+    below_horizon_label_actor.visibility = False
     pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
     pl.add_point_labels(axes.points[27:640:36], get_horizon_labels()[18:], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
     # pl.add_point_labels(axes.points, range(len(axes.points)), font_size=20)
 
-    Tests.cameraHandler.initialize(pl)
+    Tests.cameraHandler.initialize(pl, below_horizon_label_actor)
 
     print("Controls:")
     print("• Drag Left Mouse: Swivel your head around")
