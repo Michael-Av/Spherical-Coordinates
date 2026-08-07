@@ -102,7 +102,7 @@ if (args.identifyStar != None): # identify a given star instead of displaying th
 
 constellation=None
 if (args.constellation != None):
-    constellation = args.constellation[0]
+    constellation = args.constellation
 allCoords = rld.getAllEquatorialCoords(constellation)
 visibleStarsNames = []
 visibleStarsAltitudes = []
