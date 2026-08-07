@@ -36,6 +36,12 @@ def get_horizon_labels():
         if i == 270: result.append("East")
     return result
 
+def getStarSizeScales(appMagnitudes):
+    starScalars = []
+    for appMagnitude in appMagnitudes:
+        starScalars.append(-0.185*appMagnitude + 1.25)
+    return starScalars
+
 def getGround():
     phi_vals = np.radians(np.arange(0, 360, 10))
     theta_vals = [np.pi/2]*36
@@ -77,7 +83,7 @@ def getLabels(names, phi_values, theta_values):
 
     return result
 
-def plotVisibleStars(names, altitudes, azimuths):
+def plotVisibleStars(names, altitudes, azimuths, appMagnitudes, showLabels):
     phi_values = [0]*len(altitudes)
     for i in range(len(altitudes)):
         phi_values[i] = np.pi/2 - altitudes[i]
@@ -104,16 +110,22 @@ def plotVisibleStars(names, altitudes, azimuths):
     pl = pv.Plotter()
     pl.add_mesh(background_sphere, color='black', show_edges=True)
     pl.add_mesh(axes, color='red')
-    pl.add_mesh(stars, color='white')
+
+    stars["my_sizes"] = getStarSizeScales(appMagnitudes)
+    
+    starSpheres = stars.glyph(geom=pv.Sphere(radius=0.004), scale="my_sizes", orient=False)
+    pl.add_mesh(starSpheres, color='white', lighting=False)
     pl.add_mesh(getGround(), name='ground', color='green', copy_mesh = False)
 
     print(len(names))
 
     above_horizon_labels, above_horizon_label_positions, below_horizon_labels, below_horizon_label_positions = getLabels(names, phi_values, theta_values)
 
-    pl.add_point_labels(above_horizon_label_positions, above_horizon_labels, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
-    below_horizon_label_actor = pl.add_point_labels(below_horizon_label_positions, below_horizon_labels, name='below_horizon_labels', text_color='white', font_size = 30, always_visible = False, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
-    below_horizon_label_actor.visibility = False
+    below_horizon_label_actor = None
+    if showLabels:
+        pl.add_point_labels(above_horizon_label_positions, above_horizon_labels, text_color='white', font_size = 30, always_visible = True, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+        below_horizon_label_actor = pl.add_point_labels(below_horizon_label_positions, below_horizon_labels, name='below_horizon_labels', text_color='white', font_size = 30, always_visible = False, margin=10, shape_opacity=0, show_points=False, justification_horizontal='center')
+        below_horizon_label_actor.visibility = False
     pl.add_point_labels(axes.points[9::36], get_horizon_labels()[:19], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
     pl.add_point_labels(axes.points[27:640:36], get_horizon_labels()[18:], font_size = 30, text_color='white', shape = None, always_visible = True, show_points=False)
     # pl.add_point_labels(axes.points, range(len(axes.points)), font_size=20)

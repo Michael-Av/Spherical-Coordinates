@@ -5,7 +5,7 @@ PI = np.pi
 plt.style.use('dark_background')
 
 # if 2 * len(names) = len(altitudes) = len(azimuths), then trajectories are to be plotted
-def plotVisibleStars(names, altitudes, azimuths):
+def plotVisibleStars(names, altitudes, azimuths, appMagnitudes, showLabels):
     # names.append("")
     # altitudes.append(5*PI/180)
     # azimuths.append(0)

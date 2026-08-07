@@ -9,7 +9,7 @@ state = {
     "pitch": -20.0, 
     "last_pos": None, 
     "dragging": False,
-    "fov": 30.0,  # Tracks our field of view angle
+    "fov": 70.0,  # Tracks our field of view angle
     "plot": None,     # Temporary, this will be set to the 3D plot when the program starts
     "below_horizon_label_actor": None
 }
@@ -48,14 +48,17 @@ def on_mouse_move(iren, event):
 
     # adjust ground opacity and below horizon labels if looking down
     plot = state["plot"]
+
+    if state["below_horizon_label_actor"] != None: 
+        if state["pitch"] < 0: 
+            state["below_horizon_label_actor"].visibility = False
+        else: 
+            state["below_horizon_label_actor"].visibility = True
     if state["pitch"] < 0:
-        state["below_horizon_label_actor"].visibility = False
         return
     opacity = 1 - 2*state["pitch"] / 90
     if opacity < 0: opacity = 0
     plot.actors['ground'].prop.opacity = opacity
-
-    state["below_horizon_label_actor"].visibility = True
     state['plot'].render()
     state['plot'].update()
 
@@ -87,6 +90,7 @@ def initialize(plot, below_horizon_label_actor):
     plot.camera.focal_point = EYE_POS
     #plot.camera.azimuth = 90.0
     plot.camera.zoom(0.5)
+    plot.camera.view_angle = state["fov"]
 
     iren = plot.render_window.GetInteractor()
     state["plot"] = plot

@@ -72,6 +72,8 @@ parser.add_argument("-t", "--time", type=int, nargs='*', help="Provide the time 
 parser.add_argument("-n", "--numStars", type=int, help="Provide the maximum number of stars to display on the map (deafult 25)", default=25)
 parser.add_argument("-i", "--identifyStar", type=float, nargs=2, metavar=("AZIMUTH", "ALTITUDE"), help="Provide the azimuth and altitude in degrees of a star to identify")
 parser.add_argument("-r", "--trajectory", action='store_true', help="Display trajectory arrows on map")
+parser.add_argument("-c", "--constellation", metavar=("CONSTELLATION_NAME"), help="Provide the name of the constellation you want to graph")
+parser.add_argument("-l", "--labels", action='store_true', help="Display labels of important stars on map")
 
 args = parser.parse_args()
 
@@ -98,25 +100,29 @@ if (args.identifyStar != None): # identify a given star instead of displaying th
     print("You are looking at", nearestStar, "with estimated coordinates (RA, dec) = (", rightAscension * 12/PI, ",", declination * 180/PI, ")")
     exit(0)
 
-allCoords = rld.getAllEquatorialCoords()
+constellation=None
+if (args.constellation != None):
+    constellation = args.constellation[0]
+allCoords = rld.getAllEquatorialCoords(constellation)
 visibleStarsNames = []
 visibleStarsAltitudes = []
 visibleStarsAzimuths = []
+visibleStarApparentMagnitudes = []
 starCount = 0
 for coord in allCoords:
     if starCount < args.numStars:
-        name, rightAscension, declination = coord
+        name, rightAscension, declination, apparentMagnitude = coord
         altitude, azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime)
-        # if altitude>0:
         print(name, "can be viewed at:\nAltitude:", altitude*180/PI, "\nAzimuth:", azimuth*180/PI, end="\n\n")
         visibleStarsNames.append(name)
         visibleStarsAltitudes.append(altitude)
         visibleStarsAzimuths.append(azimuth)
+        visibleStarApparentMagnitudes.append(apparentMagnitude)
         starCount += 1
         if args.trajectory:
             future_altitude, future_azimuth = coords.calcHorizontalCoords(rightAscension, declination, lat*PI/180, long*PI/180, siderealTime + PI/12)
             visibleStarsAltitudes.append(future_altitude)
             visibleStarsAzimuths.append(future_azimuth)
 
-display3D.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths)
+display3D.plotVisibleStars(visibleStarsNames, visibleStarsAltitudes, visibleStarsAzimuths, visibleStarApparentMagnitudes, args.labels)
         
