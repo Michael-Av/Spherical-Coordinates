@@ -14,6 +14,15 @@ state = {
     "below_horizon_label_actor": None
 }
 
+def get_ground_opacity():
+    if state["pitch"] < 0: return 1
+    return 1 - 2*state["pitch"]/90
+
+def get_below_horizon_stars_visibility():
+    if state["pitch"] < 0:
+        return False
+    return True
+
 # --- LOOK AROUND SYSTEM ---
 def on_left_down(iren, event):
     state["dragging"] = True
@@ -44,21 +53,14 @@ def on_mouse_move(iren, event):
     # Force coordinates to lock, change look direction
     state["plot"].camera.position = EYE_POS
     state["plot"].camera.focal_point = EYE_POS + look_dir
-    state["plot"].render()
 
     # adjust ground opacity and below horizon labels if looking down
-    plot = state["plot"]
 
     if state["below_horizon_label_actor"] != None: 
-        if state["pitch"] < 0: 
-            state["below_horizon_label_actor"].visibility = False
-        else: 
-            state["below_horizon_label_actor"].visibility = True
-    if state["pitch"] < 0:
-        return
-    opacity = 1 - 2*state["pitch"] / 90
-    if opacity < 0: opacity = 0
-    plot.actors['ground'].prop.opacity = opacity
+        state["below_horizon_label_actor"].visibility = get_below_horizon_stars_visibility()
+
+    state['plot'].actors['ground'].prop.opacity = get_ground_opacity()
+
     state['plot'].render()
     state['plot'].update()
 
